@@ -40,7 +40,7 @@
         <div class="col-md-7 mr-auto">
             <div class="card card-register card-white">
                 <div class="card-header">
-                    <img class="card-img" src="{{ asset('white') }}/img/card-primary.png" alt="Card image">
+                    <img class="card-img" src="{{ asset('/img/card-primary.png') }}" alt="Card image">
                     <h4 class="card-title">{{ _('Register') }}</h4>
                 </div>
                 <form class="form" method="post" action="{{ route('register') }}">

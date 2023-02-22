@@ -23,7 +23,7 @@ class CustomersController extends Controller
             ->where('active', '=', 1)
             ->get();
         ;
-        return view('customers.getCustomers', [
+        return view('customers.customers', [
             'customers' => $customers,
         ]);
     }

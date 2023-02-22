@@ -1,4 +1,4 @@
-@extends('layouts.app', ['pageSlug' => 'dashboard'])
+@extends('layouts.app', ['pageSlug' => 'customer'])
 
 @section('content')
     <div class="row">
@@ -29,7 +29,11 @@
                                             <td>{{$customer->phone}}</td>
                                             <td>{{$customer->date_birth}}</td>
                                             <td>
-                                               
+                                                <a type="button" class="btn btn-primary"
+                                                    data-bs-toggle="modal" data-bs-target="#update-customer-modal" data-data="{{json_encode($customer)}}">
+                                                    {{ __('Editar') }}
+                                                </a>
+                                                <button type="button" class="btn btn-danger">{{ __('Agendar') }}</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -55,6 +59,47 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="update-customer-modal" tabindex="-1" role="">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form method="post" id="formUpdate" action="{{route('customers.updateCustomers')}}" class="p-6">
+                @csrf
+                @method('Patch')
+                <div class="modal-body">
+                    <label class="label-control" for="username">
+                        Nombre
+                    </label>
+                    <input class="form-control" id="Name" name="Name" type="text" placeholder="Nombre" required>
+                    <label class="label-control" for="username">
+                        Correo
+                    </label>
+                    <input class="form-control" id="Email" name="Email" type="email" required>
+                    <label class="label-control" for="username">
+                        Teléfono
+                    </label>
+                    <input class="form-control" min="0" id="Phone" name="Phone" type="number" step="1">
+                    <label class="label-control" for="username">
+                        Cumpleaños
+                    </label>
+                    <input class="form-control" id="DateBirth" name="DateBirth" type="date">
+                    <input class="form-control" id="Permission" name="Permission" type="hidden">
+                    <input class="form-control" id="Active" name="Active" value="1" type="hidden">
+                    <input class="form-control" id="Customer" name="Customer" type="hidden">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
     {{-- <div class="row">
         <div class="col-lg-4">
             <div class="card card-chart">
@@ -379,13 +424,22 @@
             </div>
         </div>
     </div> --}}
-@endsection
-
-@push('js')
-    <script src="{{ asset('/js/plugins/chartjs.min.js') }}"></script>
     <script>
-        $(document).ready(function() {
-          demo.initDashboardPageCharts();
+        let modalCustomer = document.getElementById('update-customer-modal');
+        modalCustomer.addEventListener('show.bs.modal',function(e){
+            var $this = $(e.relatedTarget);
+            const dataN = $this.data('data');
+        console.log(dataN);
+        const { id, name, email, phone, type, date_birth } = dataN;
+            $('#Name').val(name)
+            $('#Customer').val(id)
+            $('#Email').val(email)
+            $('#Phone').val(phone)
+            $('#DateBirth').val(date_birth)
+            $('#Permission').val(type)
         });
+        // $(document).ready( function () {
+        //     $('#customers_table').DataTable();
+        // });
     </script>
-@endpush
+@endsection
